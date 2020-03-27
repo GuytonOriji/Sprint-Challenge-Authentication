@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
 import {NavLink,Route, Switch } from 'react-router-dom'
-
+import {createStore, applyMiddleware} from 'redux'
+import {Provider} from 'react-redux'
+import thunk from 'redux-thunk'
 import Login from './comps/Login.js'
 import Register from './comps/Register.js'
 import Jokes from './comps/Jokes.js'
 import {PrivateRouter} from './comps/privateRouter/'
+import reducer from './comps/redux/reducers'
+import {Button} from 'reactstrap'
+import Header from './header'
 
 
+const store = createStore(reducer,applyMiddleware(thunk))
 
 class App extends Component {
   constructor(props){
@@ -19,20 +25,13 @@ class App extends Component {
       login:'/auth/login',
       jokes:'/jokes',
 
-      headerMsg:'Please Register or Login'
     }
   }
 
 
   componentDidMount(){
 
-    if(localStorage.getItem('token')){
-        this.setState({
-          headerMsg:` ${localStorage.getItem('msg')}`
-        })
-    }else{
-        
-    }
+   
   }
 
 
@@ -44,10 +43,9 @@ class App extends Component {
 
   render() {
     return (
+      <Provider store={store}>
       <div className="App">
-        <header>
-        <h2>{this.state.headerMsg}</h2>
-        </header>
+       <Header />
         <main>
 
           
@@ -57,9 +55,9 @@ class App extends Component {
 
            return (
             <div>
-           <button><NavLink to='/login'>login</NavLink></button>{'   '}
-           <button><NavLink to='/register'>register</NavLink></button>{'   '}
-           <button><NavLink to='/jokes'>jokes</NavLink></button>{'   '}
+           <Button color='success'><NavLink to='/login'>login</NavLink></Button>{'   '}
+           <Button color='danger'><NavLink to='/register'>register</NavLink></Button>{'   '}
+           <Button color='info'><NavLink to='/jokes'>jokes</NavLink></Button>{'   '}
 
            </div>
 
@@ -99,6 +97,7 @@ class App extends Component {
 
         <footer></footer>
       </div>
+      </Provider>
           );
   }
 }

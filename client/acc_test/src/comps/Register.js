@@ -7,7 +7,7 @@ class Register extends Component {
   constructor(props){
     super(props)
     this.state={
-     sername:'',
+     username:'',
         password:''
     }
     this.handleRegister = this.handleRegister.bind(this)

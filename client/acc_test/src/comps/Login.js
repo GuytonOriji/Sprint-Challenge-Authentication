@@ -3,18 +3,10 @@ import axios from 'axios'
 import {NavLink} from 'react-router-dom'
 import { createBrowserHistory } from 'history';
 import { withRouter } from 'react-router';
+import {connect} from 'react-redux'
+import {fetchOrNah,fetchHeaderMsg} from './redux/actions'
 
 
-const history = createBrowserHistory()
-
-
-const location = history.location;
-
-// Listen for changes to the current location.
-const unlisten = history.listen((location, action) => {
-  // location is an object like window.location
-  console.log(action, location.pathname, location.state);
-});
 
 
 
@@ -48,13 +40,15 @@ class Login extends Component {
       console.log(res)
         localStorage.setItem('token',res.data.token)
         localStorage.setItem('msg',res.data.msg)
+        this.props.fetchHeaderMsg()
     })
     .catch(err=>{
         console.log(err)
     })
     .finally(done=>{
+       this.props.fetchOrNah()
        this.props.history.push('/jokes')
-      
+
     })
     //e.reset()
   }
@@ -88,4 +82,16 @@ class Login extends Component {
   }
 }
 
-export default  withRouter(Login);
+
+const mapStateToProps = state =>{
+  return {
+    jokes:state.jokes
+  }
+}
+
+
+
+export default  connect(
+  mapStateToProps,
+  {fetchOrNah,fetchHeaderMsg}
+  )(withRouter(Login));

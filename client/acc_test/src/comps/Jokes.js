@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import {axiosWithAuth} from './auth/'
 import {NavLink} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {fetchOrNah,fetchHeaderMsg} from './redux/actions'
 
 
 class Jokes extends Component {
   constructor(props){
     super(props)
     this.state={
-      jokes:'',
       btnmsg:'Click above to get jokes'
     }
 
@@ -17,18 +18,15 @@ class Jokes extends Component {
 
 
   componentDidMount(){
-    axiosWithAuth().get(`http://localhost:3300/api/jokes`)
-      .then(res=>{
-        this.setState({
-          jokes:res.data
-        })
-      })
-  
+   
+  console.log('efefef',this.props)
+  this.props.fetchOrNah()
   }
 
 
   componentDidUpdate(){
- 
+  
+
   }
 
  componentWillUnmount(){
@@ -38,12 +36,15 @@ class Jokes extends Component {
 
 logout(){
   localStorage.clear()
+   this.props.fetchHeaderMsg()
+
 }
 
 
 
 
   render() {
+
 
     return (
      
@@ -59,8 +60,8 @@ logout(){
             <div>
       
             {
-              this.state.jokes &&
-              this.state.jokes.map(joke=>{
+              this.props.jokes &&
+              this.props.jokes.map(joke=>{
                 return (
 
                   <div key={joke.id}>
@@ -78,4 +79,16 @@ logout(){
   }
 }
 
-export default Jokes;
+
+
+
+const mapStateToProps = state =>{
+  return {
+    jokes:state.jokes
+  }
+}
+
+export default  connect(
+  mapStateToProps,
+  {fetchOrNah,fetchHeaderMsg}
+  )(Jokes);
