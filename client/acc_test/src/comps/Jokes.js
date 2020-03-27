@@ -7,7 +7,8 @@ class Jokes extends Component {
   constructor(props){
     super(props)
     this.state={
-      jokes:''
+      jokes:'',
+      btnmsg:'Click above to get jokes'
     }
 
     this.logout = this.logout.bind(this)
@@ -16,9 +17,8 @@ class Jokes extends Component {
 
 
   componentDidMount(){
-      axiosWithAuth().get(`http://localhost:3300/api/jokes`)
+    axiosWithAuth().get(`http://localhost:3300/api/jokes`)
       .then(res=>{
-        console.log(res)
         this.setState({
           jokes:res.data
         })
@@ -28,27 +28,38 @@ class Jokes extends Component {
 
 
   componentDidUpdate(){
-
+ 
   }
 
-
+ componentWillUnmount(){
+      
+  
+  }
 
 logout(){
-
+  localStorage.clear()
 }
 
 
+
+
   render() {
+
     return (
      
             <div> 
             <h1>JOKES</h1>
+            <div>
+
             <NavLink to='/'><button>Home</button></NavLink>
             <NavLink to='/'><button onClick={this.logout}>Logout</button></NavLink>
+            </div>
+            <div>
+            </div>
             <div>
       
             {
-              this.state.jokes && 
+              this.state.jokes &&
               this.state.jokes.map(joke=>{
                 return (
 

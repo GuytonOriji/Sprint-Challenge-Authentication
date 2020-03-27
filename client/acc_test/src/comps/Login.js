@@ -1,7 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import {NavLink} from 'react-router-dom'
+import { createBrowserHistory } from 'history';
+import { withRouter } from 'react-router';
 
+
+const history = createBrowserHistory()
+
+
+const location = history.location;
+
+// Listen for changes to the current location.
+const unlisten = history.listen((location, action) => {
+  // location is an object like window.location
+  console.log(action, location.pathname, location.state);
+});
 
 
 
@@ -19,12 +32,12 @@ class Login extends Component {
 
 
   componentDidMount(){
+    console.log(this.props)
  
   }
 
 
   componentDidUpdate(){
-
   }
 
 
@@ -39,7 +52,10 @@ class Login extends Component {
     .catch(err=>{
         console.log(err)
     })
-
+    .finally(done=>{
+       this.props.history.push('/jokes')
+      
+    })
     //e.reset()
   }
 
@@ -72,4 +88,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default  withRouter(Login);
